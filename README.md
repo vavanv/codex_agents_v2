@@ -36,14 +36,16 @@ $project = 'C:\Develop\my-app'
 ```
 
 Installation creates `<project>/.codex/dev-gate/` containing the runner,
-instructions, role templates, runtime reader and ownership manifest. Existing
-root `AGENTS.md`, Codex configuration and agent files are preserved. Installation
-does not start Codex, activate custom agents, run project checks or install packages.
+instructions, role templates, runtime reader and ownership manifest. If the project
+has `AGENTS.md`, installation saves its exact bytes as `AGENTS.copy.md`, then appends
+the gate instructions to the active `AGENTS.md`. Existing project instructions remain
+active. If there is no `AGENTS.md`, the installer creates one with the gate instructions.
+An existing backup stops installation before writing anything; it is never overwritten.
 
-Open Codex in the target project and instruct it to read
-`.codex/dev-gate/templates/development/AGENTS.md` and the adjacent
-`workflows/develop.md` before using the gate. Its runner is
-`.codex/dev-gate/gate/gate.cjs`. See "Run a change" below for stage commands.
+Codex configuration and existing agent files are preserved. Installation does not
+start Codex, activate custom agents, run project checks or install packages. Open a
+new Codex session in the target project so it loads the updated `AGENTS.md`.
+The installed runner is `.codex/dev-gate/gate/gate.cjs`.
 
 ### Install into additional projects
 
@@ -81,7 +83,14 @@ checks the ownership manifest and all managed file hashes before deleting files;
 changed or missing managed files stop removal. Preserve your changes and reconcile
 them before retrying; do not edit manifest hashes to force removal.
 
-Existing project instructions, configuration and unmanaged files are preserved.
+For new installations, uninstall also verifies the active `AGENTS.md` and original
+`AGENTS.copy.md`. If unchanged, it restores the original `AGENTS.md` and consumes
+the backup. If installation created `AGENTS.md`, uninstall removes that unchanged
+file. Edits to the active instructions or backup stop removal before any files
+are deleted; preserve and reconcile those edits first. Legacy version-1 installations
+leave root instructions untouched when removed.
+
+Existing configuration and unmanaged files are preserved.
 Empty installation directories are removed. Run evidence under
 `~/.codex/dev-gate/runs/` (or `CODEX_GATE_HOME`) is retained. An interrupted install
 without a manifest requires manual reconciliation.
@@ -105,25 +114,23 @@ node $manager uninstall $project
 ### 1. Open the target project in Codex
 
 Open the project where you installed the gate, for example `C:\Develop\my-app`.
-Start with this prompt, replacing the task and paths with your own:
+Installation puts the workflow instructions in the project's root `AGENTS.md`.
+In a new session, give Codex the task normally, for example:
 
 ```text
-Use the installed development gate for this task: fix the lower-bound bug in clamp.
-Read .codex/dev-gate/templates/development/AGENTS.md and
-.codex/dev-gate/templates/development/workflows/develop.md first.
-Inspect this project's source and existing test commands. Propose acceptance
-criteria, allowed edit paths and exact checks for my approval before starting.
-After approval, use three distinct real agent sessions sequentially for
-implementation, validation and review. Record observed identities through the
-installed gate's start/finish commands. Run checks through the gate, then show
-the report, evidence directory, findings and any unverified integration details.
-If real delegation is unavailable, stop and report that limitation.
+Fix the lower-bound bug in clamp.
 ```
 
-The installed instructions are not automatically activated. Include the instruction
-to read them when starting a new task. Installing alone does not create a slash
-command. Codex handles the stage commands below as the orchestrator; you review
-the proposed scope/checks and the resulting changes.
+The root instructions tell Codex to read the installed workflow, propose scope
+and checks, then use the three sequential agents after approval. No long setup
+prompt is needed. Installing alone does not create a slash command or tool hooks.
+Codex handles the stage commands below as the orchestrator; you review the proposed
+scope/checks and resulting changes. If real delegation is unavailable, it must
+report the limitation. More specific instructions in nested `AGENTS.md` files may
+also apply to files in their directories.
+
+For an older installation that did not update root instructions, uninstall it using
+the current source checkout's uninstaller, reinstall, and open a new session.
 
 ### 2. Review the task spec
 
