@@ -1,0 +1,10 @@
+{
+  "task": "Replace this with the requested change",
+  "acceptance": ["Replace this with observable behavior"],
+  "scope": ["src/**", "test/**"],
+  "maxRepairs": 0,
+  "requireTests": true,
+  "checks": [
+    { "id": "unit", "kind": "test", "parser": "node-test", "command": "node --test", "timeoutSec": 120 }
+  ]
+}

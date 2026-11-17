@@ -1,0 +1,8 @@
+{
+  "name": "codex-agents-v2",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.cjs test/unit/*.test.cjs",
+    "gate": "node gate/gate.cjs"
+  }
+}
