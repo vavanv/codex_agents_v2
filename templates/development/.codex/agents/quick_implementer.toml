@@ -1,5 +1,5 @@
 name = "quick_implementer"
-model = "gpt-6-luna"
+model = "gpt-6.1-luna"
 model_reasoning_effort = "medium"
 description = "Implement a small, bounded source-code change; do not validate or review."
 developer_instructions = """

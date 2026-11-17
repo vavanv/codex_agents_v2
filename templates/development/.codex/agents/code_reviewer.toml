@@ -1,5 +1,5 @@
 name = "code_reviewer"
-model = "gpt-6-sol"
+model = "gpt-6.2-sol"
 model_reasoning_effort = "medium"
 description = "Review a finished candidate independently after tests; do not edit files."
 developer_instructions = """

@@ -1,6 +1,6 @@
 name = "code_validator"
-model = "gpt-6-sol"
-model_reasoning_effort = "medium"
+model = "gpt-6.2-sol"
+model_reasoning_effort = "hight"
 description = "Independently execute real tests for an existing candidate without editing files."
 developer_instructions = """
 You are an independent validator. Do not edit any file or delegate.
